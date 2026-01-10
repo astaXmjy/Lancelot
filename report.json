@@ -1,0 +1,11 @@
+{
+  "project": "C:\\Users\\Ashish Yadav\\Downloads\\BugBazaar-master\\BugBazaar-master",
+  "parsed_chunks": 86,
+  "embeddings_generated": 86,
+  "storage_success": true,
+  "collection_stats": {
+    "collection_name": "android_code_embeddings",
+    "total_embeddings": 86,
+    "persist_directory": "./chroma_db"
+  }
+}
