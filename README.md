@@ -1,10 +1,10 @@
-# Sinkiro - Android Code Analysis Pipeline
+# Lancelot - Android Code Analysis Pipeline
 
 ![Lancelot](./6116926-lancelot.png)
 
 ## Overview
 
-Sinkiro is an Android source code analysis pipeline that uses Tree-sitter for parsing, HuggingFace embeddings for semantic understanding, and ChromaDB for vector storage. It enables semantic search and analysis of Android codebases.
+Lancelot is an Android source code analysis pipeline that uses Tree-sitter for parsing, HuggingFace embeddings for semantic understanding, and ChromaDB for vector storage. It enables semantic search and analysis of Android codebases.
 
 ## What Has Been Done
 
@@ -18,7 +18,7 @@ Sinkiro is an Android source code analysis pipeline that uses Tree-sitter for pa
 ## Project Structure
 
 ```
-Sinkiro/
+Lancelot/
 ├── code_parser.py          # Tree-sitter based code parser (Java/Kotlin)
 ├── embeddings.py           # HuggingFace embedding generator
 ├── vector_store.py         # ChromaDB vector storage
