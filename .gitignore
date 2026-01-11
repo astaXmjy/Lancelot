@@ -140,3 +140,6 @@ Thumbs.db
 *.npy
 embeddings/
 vector_store/
+chroma_db/
+*_report.json
+test_parser.py
