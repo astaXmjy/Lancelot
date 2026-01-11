@@ -5,7 +5,7 @@
   "storage_success": true,
   "collection_stats": {
     "collection_name": "android_code_embeddings",
-    "total_embeddings": 86,
+    "total_embeddings": 172,
     "persist_directory": "./chroma_db"
   }
 }

@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-from tree_sitter import Node
+from tree_sitter import Parser, Language, Node
 from typing import Dict, List, Tuple, Optional
 import logging
 
@@ -12,30 +12,41 @@ class AndroidCodeParser:
             import tree_sitter_languages
             self.parser_map = {}
             self.language_map = {}
-            
-            # Load Java parser
-            self.parser_map['java'] = tree_sitter_languages.get_parser('java')
-            self.language_map['java'] = tree_sitter_languages.get_language('java')
-            
-            # Load Kotlin parser  
-            self.parser_map['kotlin'] = tree_sitter_languages.get_parser('kotlin')
-            self.language_map['kotlin'] = tree_sitter_languages.get_language('kotlin')
-            
+
+            # Load Java parser - new API
+            java_lang = tree_sitter_languages.get_language('java')
+            java_parser = Parser()
+            java_parser.set_language(java_lang)  # Compatible with tree-sitter 0.20+
+            # For tree-sitter 0.23+, you can also use: java_parser.language = java_lang
+            self.parser_map['java'] = java_parser
+            self.language_map['java'] = java_lang
+
+            # Load Kotlin parser - new API
+            kotlin_lang = tree_sitter_languages.get_language('kotlin')
+            kotlin_parser = Parser()
+            kotlin_parser.set_language(kotlin_lang)  # Compatible with tree-sitter 0.20+
+            self.parser_map['kotlin'] = kotlin_parser
+            self.language_map['kotlin'] = kotlin_lang
+
             # Skip XML for now (install tree-sitter-xml separately)
-            # self.parser_map['xml'] = tree_sitter_languages.get_parser('xml')
-            # self.language_map['xml'] = tree_sitter_languages.get_language('xml')
-            
+            # xml_lang = tree_sitter_languages.get_language('xml')
+            # xml_parser = Parser()
+            # xml_parser.language = xml_lang
+            # xml_parser.timeout_micros = 3_000_000
+            # self.parser_map['xml'] = xml_parser
+            # self.language_map['xml'] = xml_lang
+
             logger.info("Tree-sitter parsers initialized successfully (XML skipped)")
         except Exception as e:
             logger.error(f"Failed to initialize Tree-sitter parsers: {e}")
             raise
     
     def parse_file(self, file_path: str) -> Optional[Dict]:
-        """Parse a single source file and extract AST"""
+        """Parse a single source file and extract AST using new tree-sitter API"""
         try:
             file_ext = Path(file_path).suffix.lower()
             language_key = None
-            
+
             if file_ext == '.java':
                 language_key = 'java'
             elif file_ext == '.kt':
@@ -45,16 +56,33 @@ class AndroidCodeParser:
             else:
                 logger.warning(f"Unsupported file type: {file_ext}")
                 return None
-            
+
+            if language_key not in self.parser_map:
+                logger.warning(f"Parser not available for {language_key}")
+                return None
+
             parser = self.parser_map[language_key]
             language = self.language_map[language_key]
-            
-            with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
-                source_code = f.read()
-            
-            tree = parser.parse(bytes(source_code, 'utf-8'))
+
+            # Read source code as bytes (required by tree-sitter)
+            with open(file_path, 'rb') as f:
+                source_bytes = f.read()
+
+            # Parse using new API
+            tree = parser.parse(source_bytes)
+
+            if tree is None:
+                logger.warning(f"Parsing failed or timed out for {file_path}")
+                return None
+
             root_node = tree.root_node
-            
+
+            # Decode source for storage (with error handling)
+            try:
+                source_code = source_bytes.decode('utf-8')
+            except UnicodeDecodeError:
+                source_code = source_bytes.decode('utf-8', errors='ignore')
+
             return {
                 'file_path': file_path,
                 'source_code': source_code,
