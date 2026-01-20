@@ -1,0 +1,37 @@
+# Lancelot - Android Vulnerability Detection Agent
+# Requirements file
+
+# Deep Agents Framework (LangChain)
+deepagents
+tavily-python  # For web search (optional)
+
+# LangChain ecosystem
+langchain
+langchain-core
+langgraph
+langchain-anthropic # For Claude models
+langchain-openai   # For OpenAI models (optional)
+
+# Embeddings and Vector Store
+sentence-transformers
+chromadb
+torch
+
+
+# Data Models
+pydantic
+
+# Utilities
+numpy
+tqdm
+
+# HuggingFace LLM Support (enabled by default)
+transformers
+accelerate   # For GPU acceleration and device_map="auto"
+
+# Optional: Quantization for larger models (requires CUDA)
+# bitsandbytes  # For 4-bit/8-bit quantization (GPU only)
+
+# Optional: Additional cloud providers
+# langchain-google-genai  # For Gemini
+# langchain-ollama        # For Ollama local models
