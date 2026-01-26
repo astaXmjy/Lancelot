@@ -143,3 +143,22 @@ vector_store/
 chroma_db/
 *_report.json
 test_parser.py
+
+# Claude Code
+.claude/
+
+# Vulnerability reports (generated)
+vulnerability_report_*.json
+vulnerability_report_*.html
+sql_vulnerability_report_*.json
+
+# API Keys / Secrets
+.env.local
+.env.*.local
+secrets.json
+credentials.json
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
